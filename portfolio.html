@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Padamati Tarun Krishna — Data & ML Engineer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.25.6/babel.min.js"></script>
+<style>
+  :root{
+    --bg:#0a0e14; --bg-raised:#11161f; --ink:#eef2f6; --muted:#8b96a8;
+    --line:#232b38; --accent:#5ee6c8; --accent-2:#7c8cff; --warn:#ff8a5c;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif; line-height:1.6;
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif; margin:0;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:var(--accent);}
+  .wrap{max-width:920px; margin:0 auto; padding:0 24px; position:relative; z-index:2;}
+
+  nav{position:sticky; top:0; background:rgba(10,14,20,.75); backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--line); z-index:30;}
+  nav .wrap{display:flex; justify-content:space-between; align-items:center; padding:14px 24px;}
+  nav .mark{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  nav ul{list-style:none; display:flex; gap:24px; margin:0; padding:0;}
+  nav button.navlink{background:none; border:none; color:var(--muted); font-size:14px; cursor:pointer; padding:4px 0;
+    font-family:'Inter',sans-serif; position:relative;}
+  nav button.navlink.active{color:var(--ink);}
+  nav button.navlink.active::after{content:''; position:absolute; left:0; right:0; bottom:-16px; height:2px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));}
+  @media (max-width:600px){ nav ul{gap:14px;} nav button.navlink{font-size:12px;} }
+
+  .hero-stage{position:relative; overflow:hidden; border-bottom:1px solid var(--line);}
+  .hero-stage canvas{position:absolute; inset:0; width:100%; height:100%; z-index:1;}
+  header.hero{padding:110px 0 90px; position:relative; z-index:2;}
+  header.hero .kicker{display:inline-flex; align-items:center; gap:8px; color:var(--accent); font-size:13px;
+    font-family:'JetBrains Mono',monospace; border:1px solid var(--line); background:rgba(94,230,200,.06);
+    padding:5px 12px; border-radius:100px; margin-bottom:22px;}
+  .dot{width:6px; height:6px; border-radius:50%; background:var(--accent); box-shadow:0 0 8px var(--accent);}
+  header.hero h1{font-size:clamp(38px,6.5vw,64px); font-weight:700; line-height:1.08; letter-spacing:-.01em; max-width:14ch;}
+  header.hero h1 .grad{background:linear-gradient(120deg,var(--accent),var(--accent-2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  header.hero p.lede{max-width:56ch; color:var(--muted); font-size:18px; margin-top:22px;}
+  .cta{margin-top:32px; display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{padding:12px 22px; border-radius:8px; font-size:14.5px; font-weight:500; cursor:pointer; border:1px solid var(--line); font-family:'Inter',sans-serif;}
+  .btn.primary{background:var(--accent); color:#06110e; border:none;}
+  .btn.ghost{background:transparent; color:var(--ink);}
+  .btn.ghost:hover{border-color:var(--accent); color:var(--accent);}
+
+  .stat-row{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line);
+    border-radius:12px; overflow:hidden; margin-top:56px; position:relative; z-index:2;}
+  @media (max-width:640px){ .stat-row{grid-template-columns:repeat(2,1fr);} }
+  .stat{background:var(--bg-raised); padding:22px 20px;}
+  .stat .num{font-family:'JetBrains Mono',monospace; font-size:26px; color:var(--accent); font-weight:500;}
+  .stat .label{color:var(--muted); font-size:12.5px; margin-top:6px;}
+
+  section.block{padding:88px 0;}
+  .eyebrow{font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--accent-2); margin-bottom:14px;}
+  h2.title{font-size:clamp(26px,4vw,34px); font-weight:700; margin-bottom:40px;}
+
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:none;}
+  @media (prefers-reduced-motion: reduce){ .reveal{opacity:1; transform:none; transition:none;} }
+
+  /* experience accordion */
+  .role{border:1px solid var(--line); border-radius:12px; margin-bottom:12px; overflow:hidden; background:var(--bg-raised);}
+  .role-head{display:flex; justify-content:space-between; align-items:center; padding:20px 22px; cursor:pointer; gap:16px;}
+  .role-head h3{font-size:16.5px; font-weight:600;}
+  .role-head .co{color:var(--muted); font-size:13.5px; margin-top:3px; font-weight:400;}
+  .role-head .when{color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:12.5px; white-space:nowrap;}
+  .chevron{transition:transform .3s ease; color:var(--muted); flex-shrink:0;}
+  .chevron.open{transform:rotate(180deg);}
+  .role-body{max-height:0; overflow:hidden; transition:max-height .35s ease;}
+  .role-body.open{max-height:260px;}
+  .role-body .inner{padding:0 22px 22px; color:#c3ccd6; font-size:14.5px;}
+  .role-body .learned{margin-top:10px; color:var(--muted); font-style:italic; font-size:13.5px; border-left:2px solid var(--accent); padding-left:12px;}
+
+  /* project flip cards */
+  .proj-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:20px;}
+  @media (max-width:700px){ .proj-grid{grid-template-columns:1fr;} }
+  .flip-outer{perspective:1200px; height:190px;}
+  .flip-inner{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.4,.2,.2,1); cursor:pointer;}
+  .flip-outer.flipped .flip-inner{transform:rotateY(180deg);}
+  .face{position:absolute; inset:0; backface-visibility:hidden; border:1px solid var(--line); border-radius:14px; padding:22px;}
+  .face.front{background:var(--bg-raised); display:flex; flex-direction:column; justify-content:space-between;}
+  .face.back{background:linear-gradient(145deg,var(--bg-raised),#161d2b); transform:rotateY(180deg); display:flex; flex-direction:column; justify-content:center;}
+  .face h3{font-size:16px; font-weight:600;}
+  .face .hint{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted);}
+  .face .desc{font-size:13.5px; color:var(--muted); line-height:1.55;}
+  .face .stacktags{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;}
+  .stacktag{font-family:'JetBrains Mono',monospace; font-size:11px; background:rgba(124,140,255,.12); color:var(--accent-2); padding:3px 9px; border-radius:5px;}
+  .face a{font-size:12.5px; font-family:'JetBrains Mono',monospace;}
+
+  /* skills */
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:48px;}
+  @media (max-width:640px){ .grid2{grid-template-columns:1fr;} }
+  .taglist{display:flex; flex-wrap:wrap; gap:9px;}
+  .tag{border:1px solid var(--line); border-radius:8px; padding:8px 14px; font-size:13px; background:var(--bg-raised); transition:border-color .2s, color .2s;}
+  .tag:hover{border-color:var(--accent); color:var(--accent);}
+  ul.plain{margin:0; padding:0; list-style:none; font-size:14px; color:var(--muted);}
+  ul.plain li{padding:9px 0; border-top:1px solid var(--line);}
+  ul.plain li:first-child{border-top:none;}
+
+  footer{padding:90px 0 64px; text-align:center; border-top:1px solid var(--line);}
+  footer h2{font-size:clamp(26px,4vw,36px);}
+  footer p{color:var(--muted); max-width:50ch; margin:16px auto 0;}
+  .contact-links{display:flex; flex-wrap:wrap; gap:24px; justify-content:center; margin-top:30px; font-size:14.5px;}
+  .contact-links a{border-bottom:1px solid var(--accent);}
+  .bottom{color:var(--muted); font-size:12.5px; margin-top:56px;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const NAV = ["experience","projects","skills","contact"];
+
+function NetworkCanvas(){
+  const ref = useRef(null);
+  useEffect(() => {
+    const canvas = ref.current;
+    const ctx = canvas.getContext('2d');
+    let raf, w, h;
+    const N = 46;
+    const pts = Array.from({length:N}, () => ({
+      x: Math.random(), y: Math.random(),
+      vx: (Math.random()-0.5)*0.0006, vy: (Math.random()-0.5)*0.0006,
+    }));
+    function resize(){
+      w = canvas.parentElement.clientWidth; h = canvas.parentElement.clientHeight;
+      canvas.width = w * devicePixelRatio; canvas.height = h * devicePixelRatio;
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function frame(){
+      ctx.clearRect(0,0,w,h);
+      pts.forEach(p => {
+        if(!reduceMotion){
+          p.x += p.vx; p.y += p.vy;
+          if(p.x<0||p.x>1) p.vx*=-1;
+          if(p.y<0||p.y>1) p.vy*=-1;
+        }
+      });
+      for(let i=0;i<N;i++){
+        for(let j=i+1;j<N;j++){
+          const a=pts[i], b=pts[j];
+          const dx=(a.x-b.x)*w, dy=(a.y-b.y)*h;
+          const d = Math.sqrt(dx*dx+dy*dy);
+          if(d < 130){
+            ctx.strokeStyle = `rgba(94,230,200,${0.14*(1-d/130)})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(a.x*w,a.y*h); ctx.lineTo(b.x*w,b.y*h); ctx.stroke();
+          }
+        }
+      }
+      pts.forEach(p => {
+        ctx.fillStyle = 'rgba(124,140,255,0.7)';
+        ctx.beginPath(); ctx.arc(p.x*w, p.y*h, 1.6, 0, Math.PI*2); ctx.fill();
+      });
+      raf = requestAnimationFrame(frame);
+    }
+    frame();
+    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', resize); };
+  }, []);
+  return <canvas ref={ref}></canvas>;
+}
+
+function useReveal(){
+  useEffect(() => {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
+
+const ROLES = [
+  { when:"Feb – May 2026", title:"AI & Data Engineer Intern", co:"Sustainat Ltd · London (remote)",
+    body:"Built and maintained backend Python pipelines processing 50,000+ records daily. Added automated validation across five-plus REST API integrations, lifting throughput 30% and cutting data inconsistencies 25%.",
+    learned:"How fast a production system breaks when validation is an afterthought." },
+  { when:"Jan – Mar 2026", title:"Artificial Intelligence Intern", co:"Infosys Springboard · Bengaluru",
+    body:"Ran 12 structured experiments across 10,000+ training samples, improving model prediction accuracy 18% through feature engineering and hyperparameter tuning. Evaluation write-ups cut ramp-up time 40%.",
+    learned:"Documenting an experiment properly is what separates work that can be built on from work that dies with whoever did it." },
+  { when:"Jul – Aug 2025", title:"Software Engineer Intern", co:"Bluestock™ · Bengaluru",
+    body:"Optimized 15 SQL queries, cutting response time from 3.0s to 1.8s. Wrote 20 unit tests and ran code review before every merge, catching 5 critical bugs before production.",
+    learned:"SQL optimization feels invisible until the number changes." },
+  { when:"May – Jun 2025", title:"AI Developer Intern", co:"IIIT Hyderabad",
+    body:"Built multi-stage Python preprocessing pipelines for 20,000+ records with automated regression checks, improving dataset reliability 22%.",
+    learned:"Being the only one who understands the pipeline is a risk, not a strength." },
+  { when:"Jun – Aug 2024", title:"AI Intern", co:"Elewayte · Bengaluru",
+    body:"First hands-on AI/ML internship — real-world projects, completed with a Certificate of Excellence.",
+    learned:null },
+];
+
+function ExperienceAccordion(){
+  const [open, setOpen] = useState(0);
+  return (
+    <div>
+      {ROLES.map((r,i) => (
+        <div className="role" key={i}>
+          <div className="role-head" onClick={() => setOpen(open===i?-1:i)}>
+            <div>
+              <h3>{r.title}</h3>
+              <div className="co">{r.co}</div>
+            </div>
+            <div style={{display:'flex',alignItems:'center',gap:14}}>
+              <span className="when">{r.when}</span>
+              <svg className={`chevron ${open===i?'open':''}`} width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+            </div>
+          </div>
+          <div className={`role-body ${open===i?'open':''}`}>
+            <div className="inner">
+              <p style={{margin:0}}>{r.body}</p>
+              {r.learned && <div className="learned">{r.learned}</div>}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const PROJECTS = [
+  { title:"Multimodal Alzheimer's Detection", desc:"IEEE 2025 publication — 94.3% accuracy fusing multiple modalities; excellence award for the presentation.",
+    stack:["Python","PyTorch","Multimodal ML"], link:"https://github.com/Tarunkiller/Alzheimer-s" },
+  { title:"Cloud Monitoring & Automation Dashboard", desc:"FastAPI + WebSocket backend pushing live fleet metrics to React, with rule-based alerting and automated remediation.",
+    stack:["FastAPI","WebSocket","React","SQLite"], link:null },
+  { title:"Shipment & Order Tracking Simulator", desc:"SQL schema, REST API simulating carrier/ERP integration, and a Power BI dashboard for SLA-breach tracking.",
+    stack:["SQL","REST API","Power BI"], link:null },
+  { title:"SkyPath", desc:"Full-stack flight management PWA with real-time seat maps and atomic booking RPCs.",
+    stack:["Next.js 14","Supabase","Zustand"], link:null },
+  { title:"StockWise", desc:"Stock prediction & trading simulation platform using time-series analysis.",
+    stack:["Python","Time Series","Pandas"], link:"https://github.com/Tarunkiller/Scalable-Stock-Price-Prediction-Platform-using-Time-Series-Analysis-SDE-Intern-Bluestock-" },
+  { title:"AI Honeypot & Threat Intel Hub", desc:"Simulated attack surface with automated threat-pattern logging and intel aggregation.",
+    stack:["Python","Security"], link:"https://github.com/Tarunkiller/AI-Honeypot-ThreatIntel" },
+  { title:"Resume ATS Checker", desc:"Streamlit tool that scores a resume against a job description like an ATS would.",
+    stack:["Streamlit","NLP"], link:"https://github.com/Tarunkiller/resume-ats-streamlit" },
+  { title:"AI Video Surveillance", desc:"Intelligent video surveillance system with automated event detection.",
+    stack:["OpenCV","Python"], link:"https://github.com/Tarunkiller/AI-Based-Intelligent-Video-Surveillance" },
+];
+
+function ProjectCard({p}){
+  const [flipped, setFlipped] = useState(false);
+  return (
+    <div className={`flip-outer ${flipped?'flipped':''}`} onClick={() => setFlipped(!flipped)}>
+      <div className="flip-inner">
+        <div className="face front">
+          <div>
+            <h3>{p.title}</h3>
+            <div className="hint" style={{marginTop:8}}>click to see stack →</div>
+          </div>
+          <div className="desc">{p.desc}</div>
+        </div>
+        <div className="face back">
+          <div className="stacktags">{p.stack.map(s => <span className="stacktag" key={s}>{s}</span>)}</div>
+          {p.link
+            ? <a href={p.link} target="_blank" rel="noopener" onClick={e=>e.stopPropagation()}>view on github →</a>
+            : <span className="hint">click to flip back</span>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App(){
+  const [active, setActive] = useState("experience");
+  useReveal();
+
+  useEffect(() => {
+    const handler = () => {
+      let current = "experience";
+      NAV.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top < 140) current = id;
+      });
+      setActive(current);
+    };
+    document.addEventListener('scroll', handler, { passive:true });
+    return () => document.removeEventListener('scroll', handler);
+  }, []);
+
+  function go(id){ document.getElementById(id).scrollIntoView(); }
+
+  return (
+    <React.Fragment>
+      <nav>
+        <div className="wrap">
+          <span className="mark">PTK.dev</span>
+          <ul>
+            {NAV.map(id => (
+              <li key={id}>
+                <button className={`navlink ${active===id?'active':''}`} onClick={() => go(id)}>
+                  {id[0].toUpperCase()+id.slice(1)}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+
+      <div className="hero-stage">
+        <NetworkCanvas />
+        <header className="hero wrap">
+          <div className="kicker"><span className="dot"></span>open to AI / data engineering internships</div>
+          <h1>Turning messy data into <span className="grad">systems you can trust</span></h1>
+          <p className="lede">Python pipelines, validated APIs, and ML experiments — built by
+             someone who'd rather catch the bug in a unit test than in production.</p>
+          <div className="cta">
+            <button className="btn primary" onClick={() => go('contact')}>Get in touch</button>
+            <button className="btn ghost" onClick={() => go('projects')}>See the work</button>
+          </div>
+
+          <div className="stat-row">
+            <div className="stat"><div className="num">50k+</div><div className="label">records/day at Sustainat</div></div>
+            <div className="stat"><div className="num">+30%</div><div className="label">throughput from validation</div></div>
+            <div className="stat"><div className="num">+18%</div><div className="label">accuracy via experiment design</div></div>
+            <div className="stat"><div className="num">94.3%</div><div className="label">IEEE-published accuracy</div></div>
+          </div>
+        </header>
+      </div>
+
+      <section id="experience" className="block wrap">
+        <div className="eyebrow reveal">// career</div>
+        <h2 className="title reveal">Experience</h2>
+        <div className="reveal"><ExperienceAccordion /></div>
+      </section>
+
+      <section id="projects" className="block wrap">
+        <div className="eyebrow reveal">// selected work</div>
+        <h2 className="title reveal">Projects</h2>
+        <div className="proj-grid reveal">
+          {PROJECTS.map(p => <ProjectCard p={p} key={p.title} />)}
+        </div>
+      </section>
+
+      <section id="skills" className="block wrap">
+        <div className="eyebrow reveal">// capabilities</div>
+        <h2 className="title reveal">Skills &amp; education</h2>
+        <div className="grid2 reveal">
+          <div>
+            <h3 style={{fontSize:16,fontWeight:600,marginBottom:16}}>Toolkit</h3>
+            <div className="taglist">
+              {["Python","Java","SQL","REST APIs","Git","CI/CD","Unit Testing","Agile/Scrum","Multimodal ML","Excel"].map(t=>
+                <span className="tag" key={t}>{t}</span>)}
+            </div>
+            <h3 style={{fontSize:16,fontWeight:600,margin:'30px 0 16px'}}>Certifications</h3>
+            <ul className="plain">
+              <li>Secure Full Stack MEAN Developer</li>
+              <li>Frontend Development using Angular</li>
+              <li>Single Page Web Applications with AngularJS</li>
+              <li>Build a Webpage with HTML and CSS</li>
+            </ul>
+          </div>
+          <div>
+            <h3 style={{fontSize:16,fontWeight:600,marginBottom:16}}>Education</h3>
+            <p style={{fontSize:14.5,color:'#c3ccd6'}}>
+              <strong>B.Tech, Artificial Intelligence</strong><br/>
+              Kalasalingam University<br/>
+              <span className="mono" style={{color:'var(--muted)',fontSize:13}}>Apr 2022 – May 2026</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <footer id="contact" className="wrap">
+        <h2 className="reveal">Let's build something reliable.</h2>
+        <p className="reveal">Open to AI and Data Engineering intern roles involving dependable
+           pipelines, data workflows, and practical ML systems.</p>
+        <div className="contact-links reveal">
+          <a href="mailto:tarunkrishna.padamati@gmail.com">tarunkrishna.padamati@gmail.com</a>
+          <a href="tel:+919014393715">+91 90143 93715</a>
+          <a href="https://www.linkedin.com/in/padamati-tarun-krishna-2b66b7268/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/Tarunkiller" target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <div className="bottom">Repalle, Andhra Pradesh · India</div>
+      </footer>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
